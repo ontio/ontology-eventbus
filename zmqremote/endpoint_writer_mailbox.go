@@ -35,11 +35,11 @@ import (
 	"runtime"
 	"sync/atomic"
 
+	"fmt"
 	"github.com/ontio/ontology-eventbus/internal/queue/goring"
 	"github.com/ontio/ontology-eventbus/internal/queue/mpsc"
 	"github.com/ontio/ontology-eventbus/log"
 	"github.com/ontio/ontology-eventbus/mailbox"
-	"fmt"
 )
 
 const (

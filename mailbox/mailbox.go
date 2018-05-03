@@ -35,9 +35,9 @@ import (
 	"runtime"
 	"sync/atomic"
 
+	"fmt"
 	"github.com/ontio/ontology-eventbus/internal/queue/mpsc"
 	"github.com/ontio/ontology-eventbus/log"
-	"fmt"
 )
 
 type Statistics interface {

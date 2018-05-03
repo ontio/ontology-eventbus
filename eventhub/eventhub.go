@@ -45,7 +45,7 @@ type RoundRobinState struct {
 }
 
 const (
-	PublishPolicyAll= iota
+	PublishPolicyAll = iota
 	PublishPolicyRoundRobin
 	PublishPolicyRandom
 )

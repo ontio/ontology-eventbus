@@ -49,8 +49,8 @@ func newEndpointWriter(address string) actor.Producer {
 }
 
 type endpointWriter struct {
-	address string
-	conn    *zmq.Socket
+	address             string
+	conn                *zmq.Socket
 	defaultSerializerId int32
 }
 
