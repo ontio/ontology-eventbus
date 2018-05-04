@@ -32,7 +32,6 @@ limitations under the License.
 package remote
 
 import (
-	"fmt"
 	"io/ioutil"
 	slog "log"
 	"net"
