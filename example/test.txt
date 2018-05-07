@@ -1,2 +1,1 @@
 juet test
-just test
