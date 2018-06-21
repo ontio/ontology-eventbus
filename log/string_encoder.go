@@ -50,21 +50,6 @@ var (
 	sub *Subscription
 )
 
-func init() {
-	logFile, err := fileOpen("./Log/ActorLog/")
-	writers := []io.Writer{logFile, os.Stderr}
-	fileAndStdoutWrite := io.MultiWriter(writers...)
-	if err != nil {
-		fmt.Println("error: open log file failed")
-		os.Exit(1)
-	}
-	l := &ioLogger{c: make(chan Event, 100), out: fileAndStdoutWrite}
-	sub = Subscribe(func(evt Event) {
-		l.c <- evt
-	})
-	go l.listenEvent()
-}
-
 func (l *ioLogger) listenEvent() {
 	for true {
 		e := <-l.c

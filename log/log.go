@@ -35,6 +35,9 @@ package log
 import (
 	"sync/atomic"
 	"time"
+	"os"
+	"io"
+	"fmt"
 )
 
 type Level int32
@@ -103,4 +106,20 @@ func (l *Logger) Error(msg string, fields ...Field) {
 	if l.Level() < OffLevel {
 		es.Publish(Event{Time: time.Now(), Level: ErrorLevel, Prefix: l.prefix, Message: msg, Context: l.context, Fields: fields})
 	}
+}
+
+
+func InitLog(path string) {
+	logFile, err := fileOpen(path + "ActorLog/")
+	writers := []io.Writer{logFile, os.Stderr}
+	fileAndStdoutWrite := io.MultiWriter(writers...)
+	if err != nil {
+		fmt.Println("error: open log file failed")
+		os.Exit(1)
+	}
+	l := &ioLogger{c: make(chan Event, 100), out: fileAndStdoutWrite}
+	sub = Subscribe(func(evt Event) {
+		l.c <- evt
+	})
+	go l.listenEvent()
 }
