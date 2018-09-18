@@ -33,11 +33,12 @@ limitations under the License.
 package log
 
 import (
+	"fmt"
+	"io"
+	"os"
+	"path/filepath"
 	"sync/atomic"
 	"time"
-	"os"
-	"io"
-	"fmt"
 )
 
 type Level int32
@@ -108,9 +109,12 @@ func (l *Logger) Error(msg string, fields ...Field) {
 	}
 }
 
-
 func InitLog(path string) {
-	logFile, err := fileOpen(path + "ActorLog/")
+	logFile, err := fileOpen(filepath.Join(path, "ActorLog/"))
+	if err != nil {
+		fmt.Println("InitLog: open log file failed, err is %s" + err.Error())
+		os.Exit(1)
+	}
 	writers := []io.Writer{logFile, os.Stderr}
 	fileAndStdoutWrite := io.MultiWriter(writers...)
 	if err != nil {
