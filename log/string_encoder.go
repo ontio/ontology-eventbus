@@ -38,6 +38,7 @@ import (
 	"os"
 	"reflect"
 	"time"
+	"path"
 )
 
 type ioLogger struct {
@@ -57,13 +58,13 @@ func (l *ioLogger) listenEvent() {
 	}
 }
 
-func fileOpen(path string) (*os.File, error) {
-	if fi, err := os.Stat(path); err == nil {
+func fileOpen(logPath string) (*os.File, error) {
+	if fi, err := os.Stat(logPath); err == nil {
 		if !fi.IsDir() {
-			return nil, fmt.Errorf("open %s: not a directory", path)
+			return nil, fmt.Errorf("open %s: not a directory", logPath)
 		}
 	} else if os.IsNotExist(err) {
-		if err := os.MkdirAll(path, 0766); err != nil {
+		if err := os.MkdirAll(logPath, 0766); err != nil {
 			return nil, err
 		}
 	} else {
@@ -72,7 +73,7 @@ func fileOpen(path string) (*os.File, error) {
 
 	var currenttime string = time.Now().Format("2006-01-02_15.04.05")
 
-	logfile, err := os.OpenFile(path+currenttime+"_LOG.log", os.O_RDWR|os.O_CREATE, 0666)
+	logfile, err := os.OpenFile(path.Join(logPath, currenttime+"_LOG.log"), os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
 		return nil, err
 	}
