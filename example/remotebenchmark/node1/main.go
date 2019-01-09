@@ -88,14 +88,14 @@ func main() {
 	pid := actor.Spawn(props)
 
 	remotePid := actor.NewPID("127.0.0.1:8080", "remote")
-    if err := remotePid.
+	if err := remotePid.
 		RequestFuture(&messages.StartRemote{
 			Sender: pid,
 		}, 5*time.Second).
 		Wait(); err != nil {
-                fmt.Println("remote request failed:", err)
-                return
-        }
+		fmt.Println("remote request failed:", err)
+		return
+	}
 
 	wg.Add(1)
 

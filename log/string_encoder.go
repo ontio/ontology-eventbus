@@ -36,9 +36,9 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"reflect"
 	"time"
-	"path"
 )
 
 type ioLogger struct {
@@ -64,15 +64,14 @@ func fileOpen(logPath string) (*os.File, error) {
 			return nil, fmt.Errorf("open %s: not a directory", logPath)
 		}
 	} else if os.IsNotExist(err) {
-		if err := os.MkdirAll(logPath, 0766); err != nil {
+		if err := os.MkdirAll(logPath, 0755); err != nil {
 			return nil, err
 		}
 	} else {
 		return nil, err
 	}
 
-	var currenttime string = time.Now().Format("2006-01-02_15.04.05")
-
+	currenttime := time.Now().Format("2006-01-02_15.04.05")
 	logfile, err := os.OpenFile(path.Join(logPath, currenttime+"_LOG.log"), os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
 		return nil, err
