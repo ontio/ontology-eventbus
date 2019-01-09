@@ -88,11 +88,14 @@ func main() {
 	pid := actor.Spawn(props)
 
 	remotePid := actor.NewPID("127.0.0.1:8080", "remote")
-	remotePid.
+    if err := remotePid.
 		RequestFuture(&messages.StartRemote{
 			Sender: pid,
 		}, 5*time.Second).
-		Wait()
+		Wait(); err != nil {
+                fmt.Println("remote request failed:", err)
+                return
+        }
 
 	wg.Add(1)
 
@@ -110,8 +113,8 @@ func main() {
 
 	wg.Wait()
 	elapsed := time.Since(start)
-	fmt.Printf("Elapsed %s", elapsed)
+	fmt.Printf("Elapsed %s \n", elapsed)
 
 	x := int(float32(messageCount*2) / (float32(elapsed) / float32(time.Second)))
-	fmt.Printf("Msg per sec %v", x)
+	fmt.Printf("Msg per sec %v \n", x)
 }
