@@ -127,3 +127,12 @@ func InitLog(path string) {
 	})
 	go l.listenEvent()
 }
+
+// InitLogWriter initializes the given io.Writer as the log output.
+func InitLogWriter(w io.Writer) {
+	l := &ioLogger{c: make(chan Event, 100), out: w}
+	sub = Subscribe(func(evt Event) {
+		l.c <- evt
+	})
+	go l.listenEvent()
+}
